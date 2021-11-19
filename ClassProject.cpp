@@ -1,4 +1,6 @@
 #include <iostream>
+#include <math.h>
+
 using namespace std;
 
 static const float AnnualInterest = 0.03;
@@ -14,6 +16,7 @@ public:
     void enterAccountData();
     void computeInterest(int years);
     void displayAccount();
+    void calc(Account arr[], int validAccounts,int terms);
     ~Account();
 };
 
@@ -23,73 +26,80 @@ Account::~Account() {}
 
 void Account::enterAccountData()
 {
-    do
-    {
-        cout << "Enter Account Number :";
+    do {
+        cout << "Enter Account Number : ";
         cin >> AccNo;
     } while (AccNo < 1000);
 
     do
     {
-        cout << "Enter Account Balance :";
+        cout << "Enter Account Balance : ";
         cin >> AccountBalance;
     } while (AccountBalance < 1);
+
+    cout << "\n";
+
 }
 
 void Account::computeInterest(int years)
 {
-    for (size_t i = 1; i <= years; i++)
-    {
-        float interest;
-        interest = AccountBalance * AnnualInterest;
-        AccountBalance += interest;
-        cout << "Year [" << i << "] :: Ending Balance :" << AccountBalance << endl;
-    }
+    float principal = AccountBalance;
+    float exponents  = pow( 1 + (AnnualInterest) , (years) ); 
+
+    AccountBalance = principal * exponents;
+    
 }
 
 void Account::displayAccount()
 {
-    cout << "Account Number :" << AccNo << endl;
-    cout << "Account Balance :" << AccountBalance << endl;
+    cout << ":: Account Number  : " << AccNo << endl;
+    cout << ":: Account Balance : " << AccountBalance << endl;
+
 }
 
-void calc(Account arr[], int validAccounts)
+void calc(Account arr[], int validAccounts,int terms)
 {
-    int years;
-
+    cout << "Final Account Details after " << terms <<" years \n \n";
     for (size_t i = 0; i < validAccounts; i++)
     {
-        do
-        {
-            cout <<  "Enter year between 1 - 40 :";
-            cin >>  years;
-        } while (years < 1 || years > 40);
-
-        arr[i].computeInterest(years);
+        arr[i].computeInterest(terms);
         arr[i].displayAccount();
+        cout << "---- ---- --- -- \n";
     }
-    cout << "Am done \n";
+    cout << "\nCompleted 👋\n";
 }
 
 int main(int argc, char const *argv[])
 {
-    const int NUMBER_OF_ACCOUNTS = 2;
+    cout << "\n\tWelcome To ParkVille 🏔  Bank \n\n";
+
+    const int NUMBER_OF_ACCOUNTS = 10;
     Account BankAccounts[NUMBER_OF_ACCOUNTS];
 
-    char x;
     int validCount = 0;
+    char sentinal;
+    int term;
+
     do
     {
         BankAccounts[validCount].enterAccountData();
+        BankAccounts[validCount].displayAccount();
 
-        cout << "\nContinue? ";
-        cin >> x;
+        cout << "\nContinue (y/n)? ";
+        cin >> sentinal;
 
         validCount++;
         cout << endl;
-    } while (validCount < NUMBER_OF_ACCOUNTS && x == 'y');
+    } while (validCount < NUMBER_OF_ACCOUNTS && sentinal == 'y');
 
-    calc(BankAccounts,validCount);
+    do {
+        cout <<  "Enter Term between 1 - 40 : ";
+        cin >>  term;
+    } while (term < 1 || term > 40);
+
+    cout << endl;
+
+    calc(BankAccounts,validCount,term);
 
     return 0;
 }
